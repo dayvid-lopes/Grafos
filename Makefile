@@ -21,7 +21,7 @@ compilar_1550:
 			gcc -o executavel Lista1/Resgate\ em\ queda\ livre\ -\ URI\ 1552.c
 
 compilar_1552: 
-			gcc -o executavel Lista\ 2/Resgate\ em\ queda\ livre\ -\ URI\ 1552.c
+			gcc -o executavel Lista\ 2/Resgate\ em\ queda\ livre\ -\ URI\ 1552.c -lm
 
 #Regras de execução
 
@@ -32,6 +32,7 @@ run_1550:
 
 run_1552: 
 			cat Lista\ 2/entradas/entrada\ 1552 | ./executavel
+			rm executavel
 			clear
 			cat Lista\ 2/resultados/resultado\ 1552
 
