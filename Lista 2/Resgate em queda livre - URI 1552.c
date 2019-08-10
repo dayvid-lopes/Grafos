@@ -22,8 +22,9 @@ typedef struct typearesta{
 
 typedef struct typeheap Heap;
 
-struct heap{
-    Aresta *vertice;
+struct typeheap{
+    Aresta *aresta;
+    int Nfilhos;
     Heap *direita;
     Heap *esquerda;
 };
@@ -31,12 +32,56 @@ struct heap{
 #define MALLOC(t,n) (t*) malloc(sizeof(t)*n)
 #define X coordenadas->x
 #define Y coordenadas->y
+#define ARESTA raiz->aresta
+#define DIREITA raiz->direita
+#define ESQUERDA raiz->esquerda
+#define NFILHOS raiz->Nfilhos
 #define imprima(texto) fprintf(resultado, texto)
 #define imprima1(texto, valor1) fprintf(resultado, texto, valor1)
 #define imprima2(texto, valor1, valor2) fprintf(resultado, texto, valor1, valor2)
+#define filhoCompleto(valor) log2(1 - (valor / 2.0) * (1 - 2)) == (int)log2(1 - (valor / 2.0) * (1 - 2))? 1 : 0
 
 double distancia(Ponto *ponto1, Ponto *ponto2){
     return sqrt(pow(ponto1->x - ponto2->x, 2) + pow(ponto1->y - ponto2->y, 2));
+}
+
+void insert(Heap *raiz, Aresta * nova_aresta){
+    
+    if(ARESTA->peso > nova_aresta->peso){
+        Aresta *aux;
+        aux = nova_aresta;
+        nova_aresta = ARESTA;
+        ARESTA = aux;
+    }
+
+    if(NFILHOS < 2){
+        Heap *filho;
+        filho = MALLOC(Heap, 1);
+        filho->aresta = nova_aresta;
+        filho->direita = NULL;
+        filho->esquerda = NULL;
+        filho->Nfilhos = 0;
+        if(NFILHOS == 0){
+            ESQUERDA = filho;
+        }
+        else{
+            DIREITA = filho;
+        }
+    }
+    else{
+        if(ESQUERDA->Nfilhos == DIREITA->Nfilhos){
+            insert(ESQUERDA, nova_aresta);
+        }
+        else{
+            if(filhoCompleto(ESQUERDA->Nfilhos)){
+                insert(DIREITA, nova_aresta);
+            }
+            else{
+                insert(ESQUERDA, nova_aresta);
+            }
+        }
+    }
+    NFILHOS++;
 }
 
 int main (){
@@ -85,14 +130,55 @@ int main (){
                 vertice->numero = j;
                 arestas[i][j]->vertice2 = vertice;
 
-                imprima1("%.2lf\t", arestas[i][j]->peso);
+                // imprima1("%.2lf\t", arestas[i][j]->peso);
             }
-            imprima("\n");
+            // imprima("\n");
         }
 
         imprima("\n");
 
-        imprima1("teste de define com numero %d\n\n", 5);
+        // if(c == 2){
+        //     imprima1("teste de casting: %lf\n\n", sqrt(5));
+        //     imprima1("teste de casting: %lf\n\n", sqrt(7));
+        //     imprima1("teste de casting: %lf\n\n", log2(8));
+        // }
+        // else {
+            // double valor;
+
+            // int Nfilhos = 6;
+            // valor = filhoCompleto(Nfilhos);
+            // imprima1("teste de casting: %lf\n\n", valor);
+        //     if(valor == 0){
+        //         imprima("inteiro\n");
+        //     }
+        //     else
+        //     {
+        //         imprima("não inteiro\n");
+        //     }
+
+        //     valor = log2(7) - (int)log2(7);
+        //     imprima1("teste de casting: %lf\n\n", valor);
+        //     if(valor == 0){
+        //         imprima("inteiro\n");
+        //     }
+        //     else
+        //     {
+        //         imprima("não inteiro\n");
+        //     }
+
+        //     valor = log2(8) - (int)log2(8);
+        //     imprima1("teste de casting: %lf\n\n", valor);
+        //     if(valor == 0){
+        //         imprima("inteiro\n");
+        //     }
+        //     else
+        //     {
+        //         imprima("não inteiro\n");
+        //     }
+            
+            
+        // }
+
 
         c--;
     }
