@@ -31,6 +31,9 @@ struct heap{
 #define MALLOC(t,n) (t*) malloc(sizeof(t)*n)
 #define X coordenadas->x
 #define Y coordenadas->y
+#define imprima(texto) fprintf(resultado, texto)
+#define imprima1(texto, valor1) fprintf(resultado, texto, valor1)
+#define imprima2(texto, valor1, valor2) fprintf(resultado, texto, valor1, valor2)
 
 double distancia(Ponto *ponto1, Ponto *ponto2){
     return sqrt(pow(ponto1->x - ponto2->x, 2) + pow(ponto1->y - ponto2->y, 2));
@@ -82,12 +85,14 @@ int main (){
                 vertice->numero = j;
                 arestas[i][j]->vertice2 = vertice;
 
-                fprintf(resultado, "%.2lf\t", arestas[i][j]->peso);
+                imprima1("%.2lf\t", arestas[i][j]->peso);
             }
-            fprintf(resultado, "\n");
+            imprima("\n");
         }
 
-        fprintf(resultado, "\n");
+        imprima("\n");
+
+        imprima1("teste de define com numero %d\n\n", 5);
 
         c--;
     }
