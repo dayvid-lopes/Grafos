@@ -27,14 +27,12 @@ compilar_1552:
 
 run_1550: 
 			cat Lista\ 1/entradas/entrada\ 1550 | ./executavel
-			clear
-			cat Lista\ 1/resultados/resultado\1550
+			clear && cat Lista\ 1/resultados/resultado\1550
 
 run_1552: 
 			cat Lista\ 2/entradas/entrada\ 1552 | ./executavel
 			rm executavel
-			clear
-			cat Lista\ 2/resultados/resultado\ 1552
+			clear && cat Lista\ 2/resultados/resultado\ 1552
 
 # main: main.o Controle.o Data.o Filas.o HRRN.o Loterry.o 1-Loterry.o Multilevel_Feedback.o Processos.o Round-robins.o
 # 			gcc -o main main.o Controle.o Data.o Filas.o HRRN.o Loterry.o 1-Loterry.o Multilevel_Feedback.o Processos.o Round-robins.o
