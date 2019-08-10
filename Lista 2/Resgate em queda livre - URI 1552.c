@@ -2,12 +2,35 @@
 #include <stdlib.h>
 #include <math.h>
 
-typedef struct Coordenadas{
+typedef struct typecoordenadas{
     int x;
     int y;
 }Ponto;
 
+typedef struct typevertices
+{
+    int status;
+    int numero;
+}Pessoas;
+
+typedef struct typearesta{
+    double peso;
+    int status;
+    Pessoas *vertice1;
+    Pessoas *vertice2;
+}Aresta;
+
+typedef struct typeheap Heap;
+
+struct heap{
+    Aresta *vertice;
+    Heap *direita;
+    Heap *esquerda;
+};
+
 #define MALLOC(t,n) (t*) malloc(sizeof(t)*n)
+#define X coordenadas->x
+#define Y coordenadas->y
 
 double distancia(Ponto *ponto1, Ponto *ponto2){
     return sqrt(pow(ponto1->x - ponto2->x, 2) + pow(ponto1->y - ponto2->y, 2));
@@ -29,15 +52,43 @@ int main (){
 
         scanf("%d", &n);
 
-        Ponto *pessoas[n];
+        // Pessoas *pessoas[n];
+        Ponto *coordenadas[n];
+
+        Aresta *arestas[n][n];
 
         int i;
 
         for(i = 0; i < n; i++){
-            pessoas[i] = MALLOC(Ponto, 1);
-            scanf("%d %d", &pessoas[i]->x, &pessoas[i]->y);
+            coordenadas[i] = MALLOC(Ponto, 1);
+            scanf("%d %d", &coordenadas[i]->x, &coordenadas[i]->y);
         }
-        fprintf(resultado, "%lf\n", distancia(pessoas[0], pessoas[1]));
+        
+        double matriz[n*n];
+        int j;
+        
+        for(i = 0; i < n; i++){
+            for(j = 0; j < n; j++){
+                Pessoas *vertice;
+                
+                arestas[i][j] = MALLOC(Aresta, 1);
+                arestas[i][j]->peso = distancia(coordenadas[i], coordenadas[j]);
+
+                vertice = MALLOC(Pessoas, 1);
+                vertice->numero = i;
+                arestas[i][j]->vertice1 = vertice;
+                
+                vertice = MALLOC(Pessoas, 1);
+                vertice->numero = j;
+                arestas[i][j]->vertice2 = vertice;
+
+                fprintf(resultado, "%.2lf\t", arestas[i][j]->peso);
+            }
+            fprintf(resultado, "\n");
+        }
+
+        fprintf(resultado, "\n");
+
         c--;
     }
 
