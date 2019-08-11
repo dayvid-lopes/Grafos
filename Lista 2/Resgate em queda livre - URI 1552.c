@@ -40,12 +40,15 @@ struct typeheap{
 #define imprima1(texto, valor1) fprintf(resultado, texto, valor1)
 #define imprima2(texto, valor1, valor2) fprintf(resultado, texto, valor1, valor2)
 #define filhoCompleto(valor) log2(1 - (valor / 2.0) * (1 - 2)) == (int)log2(1 - (valor / 2.0) * (1 - 2))? 1 : 0
+#define ARESTAS(i, j) arestas[n * i + j]
+
+FILE *resultado;
 
 double distancia(Ponto *ponto1, Ponto *ponto2){
     return sqrt(pow(ponto1->x - ponto2->x, 2) + pow(ponto1->y - ponto2->y, 2));
 }
 
-void insert(Heap *raiz, Aresta * nova_aresta){
+void insert(Heap *raiz, Aresta *nova_aresta){
     
     if(ARESTA->peso > nova_aresta->peso){
         Aresta *aux;
@@ -84,8 +87,20 @@ void insert(Heap *raiz, Aresta * nova_aresta){
     NFILHOS++;
 }
 
+void imprimirArvore(Heap *raiz){
+    imprima1("%.2lf\t", ARESTA->peso);
+    if(ESQUERDA != NULL){
+        imprimirArvore(ESQUERDA);
+    }
+    if(DIREITA != NULL){
+        imprimirArvore(DIREITA);
+    }
+    else{
+        imprima("\n");
+    }
+}
+
 int main (){
-    FILE *resultado;
     resultado = fopen("Lista 2/resultados/resultado 1552", "w");
     if(resultado == NULL){
         return 1;
@@ -114,27 +129,48 @@ int main (){
         
         double matriz[n*n];
         int j;
-        
+        Heap *raiz;
         for(i = 0; i < n; i++){
             for(j = 0; j < n; j++){
                 Pessoas *vertice;
-                
-                arestas[i][j] = MALLOC(Aresta, 1);
-                arestas[i][j]->peso = distancia(coordenadas[i], coordenadas[j]);
+                if(i < j){
+                    arestas[i][j] = MALLOC(Aresta, 1);
+                    arestas[i][j]->peso = distancia(coordenadas[i], coordenadas[j]);
+                    // imprima1("peso: %lf", arestas[i][j]->peso);
 
-                vertice = MALLOC(Pessoas, 1);
-                vertice->numero = i;
-                arestas[i][j]->vertice1 = vertice;
-                
-                vertice = MALLOC(Pessoas, 1);
-                vertice->numero = j;
-                arestas[i][j]->vertice2 = vertice;
+                    vertice = MALLOC(Pessoas, 1);
+                    vertice->numero = i;
+                    arestas[i][j]->vertice1 = vertice;
+                    
+                    vertice = MALLOC(Pessoas, 1);
+                    vertice->numero = j;
+                    arestas[i][j]->vertice2 = vertice;
 
-                // imprima1("%.2lf\t", arestas[i][j]->peso);
+                    if(i == 0 && j == 1){
+                        raiz = MALLOC(Heap, 1);
+                        ARESTA = arestas[i][j];
+                        DIREITA = ESQUERDA = NULL;
+                        NFILHOS = 0;
+                    }
+                    else{
+                        insert(raiz, arestas[i][j]);
+                    }
+
+                    arestas[i][j]->status = 1;
+
+                    imprima1("%.2lf\t", arestas[i][j]->peso);
+                }
+                else{
+                    arestas[j][i] = arestas[i][j];
+                    imprima("\t");
+                }
             }
-            // imprima("\n");
+            imprima("\n");
         }
-
+        imprima("\n");
+        imprima("\n");
+        imprimirArvore(raiz);
+        imprima("\n");
         imprima("\n");
 
         // if(c == 2){
