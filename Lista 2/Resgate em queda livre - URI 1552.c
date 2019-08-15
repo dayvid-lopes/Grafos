@@ -2,17 +2,18 @@
 #include <stdlib.h>
 #include <math.h>
 
-typedef struct typecoordenadas{
-    int x;
-    int y;
-}Ponto;
+// typedef struct typecoordenadas{
+//     double x;
+//     double y;
+// }Ponto;
 
 typedef struct typevertices
 {
     int status;
     int numero;
-    int x;
-    int y;
+    int floresta;
+    double x;
+    double y;
 }Pessoas;
 
 typedef struct typearesta{
@@ -22,26 +23,26 @@ typedef struct typearesta{
     Pessoas *vertice2;
 }Aresta;
 
-typedef struct typeheap Heap;
+// typedef struct typeheap Heap;
 
-struct typeheap{
-    Aresta *aresta;
-    int Nfilhos;
-    Heap *pai;
-    Heap *direita;
-    Heap *esquerda;
-};
+// struct typeheap{
+//     Aresta *aresta;
+//     int Nfilhos;
+//     Heap *pai;
+//     Heap *direita;
+//     Heap *esquerda;
+// };
 
-typedef struct typepilha Pilha;
+// typedef struct typepilha Pilha;
 
-struct typepilha{
-    Heap *no;
-    Pilha *prox;
-};
+// struct typepilha{
+//     Heap *no;
+//     Pilha *prox;
+// };
 
 #define MALLOC(t,n) (t*) malloc(sizeof(t)*n)
-#define X coordenadas->x
-#define Y coordenadas->y
+// #define X coordenadas->x
+// #define Y coordenadas->y
 #define ARESTA raiz->aresta
 #define PESO aresta->peso
 #define DIREITA raiz->direita
@@ -53,158 +54,182 @@ struct typepilha{
 #define filhoCompleto(valor) log2(1 - (valor / 2.0) * (1 - 2)) == (int)log2(1 - (valor / 2.0) * (1 - 2))? 1 : 0
 #define ARESTAS(i, j) arestas[n * i + j]
 #define REMOVE(raiz, aresta) raiz = removerRaiz(raiz, aresta)
+#define distancia(ponto1, ponto2) sqrt(pow(ponto1->x - ponto2->x, 2) + pow(ponto1->y - ponto2->y, 2))
 
-FILE *resultado;
+// FILE *resultado;
 
-double distancia(Pessoas *ponto1, Pessoas *ponto2){
-    return sqrt(pow(ponto1->x - ponto2->x, 2) + pow(ponto1->y - ponto2->y, 2));
-}
+// double distancia(Pessoas *ponto1, Pessoas *ponto2){
+//     return sqrt(pow(ponto1->x - ponto2->x, 2) + pow(ponto1->y - ponto2->y, 2));
+// }
 
-Heap* insert(Heap *raiz, Aresta *nova_aresta){
-    if(raiz == NULL){
-        raiz = MALLOC(Heap, 1);
-        ESQUERDA = DIREITA = NULL;
-        ARESTA = nova_aresta;
-        return raiz;
-    }
+// Heap* insert(Heap *raiz, Aresta *nova_aresta){
+//     if(raiz == NULL){
+//         raiz = MALLOC(Heap, 1);
+//         ESQUERDA = DIREITA = NULL;
+//         ARESTA = nova_aresta;
+//         return raiz;
+//     }
 
-    if(ARESTA->peso > nova_aresta->peso){
-        Aresta *aux;
-        aux = nova_aresta;
-        nova_aresta = ARESTA;
-        ARESTA = aux;
-    }
-    Heap *filho;
+//     if(ARESTA->peso > nova_aresta->peso){
+//         Aresta *aux;
+//         aux = nova_aresta;
+//         nova_aresta = ARESTA;
+//         ARESTA = aux;
+//     }
+//     Heap *filho;
 
-    if(NFILHOS < 2){
-        filho = MALLOC(Heap, 1);
-        filho->aresta = nova_aresta;
-        filho->direita = filho->esquerda = NULL;
-        filho->pai = raiz;
-        filho->Nfilhos = 0;
-        if(NFILHOS == 0){
-            ESQUERDA = filho;
-        }
-        else{
-            DIREITA = filho;
-        }
-    }
-    else{
-        if(ESQUERDA->Nfilhos == DIREITA->Nfilhos){
-            filho = insert(ESQUERDA, nova_aresta);
-        }
-        else{
-            if(filhoCompleto(ESQUERDA->Nfilhos)){
-                filho = insert(DIREITA, nova_aresta);
-            }
-            else{
-                filho = insert(ESQUERDA, nova_aresta);
-            }
-        }
-    }
-    NFILHOS++;
-    return filho;
-}
+//     if(NFILHOS < 2){
+//         filho = MALLOC(Heap, 1);
+//         filho->aresta = nova_aresta;
+//         filho->direita = filho->esquerda = NULL;
+//         filho->pai = raiz;
+//         filho->Nfilhos = 0;
+//         if(NFILHOS == 0){
+//             ESQUERDA = filho;
+//         }
+//         else{
+//             DIREITA = filho;
+//         }
+//     }
+//     else{
+//         if(ESQUERDA->Nfilhos == DIREITA->Nfilhos){
+//             filho = insert(ESQUERDA, nova_aresta);
+//         }
+//         else{
+//             if(filhoCompleto(ESQUERDA->Nfilhos)){
+//                 filho = insert(DIREITA, nova_aresta);
+//             }
+//             else{
+//                 filho = insert(ESQUERDA, nova_aresta);
+//             }
+//         }
+//     }
+//     NFILHOS++;
+//     return filho;
+// }
 
-void imprimirArvore(Heap *raiz){
-    if(raiz == NULL){
-        imprima("Arvore vazia");
-        return;
-    }
-    imprima1("%.2lf\t", ARESTA->peso);
-    if(ESQUERDA != NULL){
-        imprimirArvore(ESQUERDA);
-    }
-    if(DIREITA != NULL){
-        imprimirArvore(DIREITA);
-    }
-    else{
-        imprima("\n");
-    }
-}
+// void imprimirArvore(Heap *raiz){
+//     if(raiz == NULL){
+//         imprima("Arvore vazia");
+//         return;
+//     }
+//     imprima1("%.2lf\t", ARESTA->peso);
+//     if(ESQUERDA != NULL){
+//         imprimirArvore(ESQUERDA);
+//     }
+//     if(DIREITA != NULL){
+//         imprimirArvore(DIREITA);
+//     }
+//     else{
+//         imprima("\n");
+//     }
+// }
 
-void decrementarPai(Heap *raiz, Heap *pai){
-    if(raiz != pai){
-        decrementarPai(raiz, pai->pai);
-    }
-    pai->Nfilhos--;
-}
+// void decrementarPai(Heap *raiz, Heap *pai){
+//     if(raiz != pai){
+//         decrementarPai(raiz, pai->pai);
+//     }
+//     pai->Nfilhos--;
+// }
 
-void peneirarValor(Heap *raiz){
-    if(NFILHOS < 2){
-        if(NFILHOS == 1){
-            if(ARESTA->peso > ESQUERDA->PESO){
-                Aresta *aux;
-                aux = ARESTA;
-                ARESTA = ESQUERDA->aresta;
-                ESQUERDA->aresta = aux;
-            }
-        }
-    }
-    else{
-        Aresta *aux;
-        if(ESQUERDA->PESO < DIREITA->PESO){
-            aux = ARESTA;
-            ARESTA = ESQUERDA->aresta;
-            ESQUERDA->aresta = aux;
-            peneirarValor(ESQUERDA);
-        }
-        else{
-            aux = ARESTA;
-            ARESTA = DIREITA->aresta;
-            DIREITA->aresta = aux;
-            peneirarValor(DIREITA);
-        }
-    }
-}
+// void peneirarValor(Heap *raiz){
+//     if(NFILHOS < 2){
+//         if(NFILHOS == 1){
+//             if(ARESTA->peso > ESQUERDA->PESO){
+//                 Aresta *aux;
+//                 aux = ARESTA;
+//                 ARESTA = ESQUERDA->aresta;
+//                 ESQUERDA->aresta = aux;
+//             }
+//         }
+//     }
+//     else{
+//         Aresta *aux;
+//         if(ESQUERDA->PESO < DIREITA->PESO){
+//             aux = ARESTA;
+//             ARESTA = ESQUERDA->aresta;
+//             ESQUERDA->aresta = aux;
+//             peneirarValor(ESQUERDA);
+//         }
+//         else{
+//             aux = ARESTA;
+//             ARESTA = DIREITA->aresta;
+//             DIREITA->aresta = aux;
+//             peneirarValor(DIREITA);
+//         }
+//     }
+// }
 
-Heap* removerRaiz(Heap *raiz, Heap *ultimoElemento){
-    if(NFILHOS == 0){
-        free(ARESTA);
-        free(raiz);
-        return NULL;
-    }
+// Heap* removerRaiz(Heap *raiz, Heap *ultimoElemento){
+//     if(NFILHOS == 0){
+//         free(ARESTA);
+//         free(raiz);
+//         return NULL;
+//     }
     
-    free(ARESTA);
-    ARESTA = ultimoElemento->aresta;
-    Heap *pai;
-    pai = ultimoElemento->pai;
-    if(pai->Nfilhos == 2){
-        pai->direita = NULL;
-    }
-    else{
-        pai->esquerda = NULL;
-    }
-    decrementarPai(raiz, pai);
-    free(ultimoElemento);
+//     free(ARESTA);
+//     ARESTA = ultimoElemento->aresta;
+//     Heap *pai;
+//     pai = ultimoElemento->pai;
+//     if(pai->Nfilhos == 2){
+//         pai->direita = NULL;
+//     }
+//     else{
+//         pai->esquerda = NULL;
+//     }
+//     decrementarPai(raiz, pai);
+//     free(ultimoElemento);
 
-    peneirarValor(raiz);
+//     peneirarValor(raiz);
 
-    // if(ESQUERDA->aresta->peso < DIREITA->aresta->peso){
+//     // if(ESQUERDA->aresta->peso < DIREITA->aresta->peso){
 
-    // }
-    return raiz;
+//     // }
+//     return raiz;
+// }
+
+int comparadorPeso(const void ** a, const void ** b) {
+    double peso_a, peso_b;
+    peso_a = ((Aresta*)*a)->peso;
+    peso_b = ((Aresta*)*b)->peso;
+
+    if (peso_a == peso_b)
+        return 0;
+
+    if (peso_a < peso_b)
+        return -1;
+
+    return 1;
 }
 
-int main (){
-    resultado = fopen("Lista 2/resultados/resultado 1552", "w");
-    if(resultado == NULL){
-        return 1;
-    }
+// void imprimirVetor(Aresta *arestas[], int n){
+//     if(n > 0){
+//         imprimirVetor(arestas, n - 1);
+//         n--;
+//         imprima1("%.2lf\t", arestas[n]->peso);
+//     }
+// }
+
+int main(){
+    // resultado = fopen("Lista 2/resultados/resultado 1552", "w");
+    // if(resultado == NULL){
+    //     return 1;
+    // }
     int c;
 
     scanf("%d", &c);
 
     while(c > 0){
 
-        int n;
+        int n,NArestas;
 
         scanf("%d", &n);
 
+        NArestas = (n*(n - 1)) / 2;
         // Pessoas *pessoas[n];
         // Ponto *coordenadas[n];
 
-        Aresta *arestas[n][n];
+        Aresta *arestas[NArestas];
 
         Pessoas *vertice[n];
 
@@ -212,29 +237,31 @@ int main (){
 
         for(i = 0; i < n; i++){
             vertice[i] = MALLOC(Pessoas, 1);
-            scanf("%d %d", &vertice[i]->x, &vertice[i]->y);
+            vertice[i]->status = 0;
+            vertice[i]->numero = vertice[i]->floresta = i;
+            scanf("%lf %lf", &vertice[i]->x, &vertice[i]->y);
         }
         
-        double matriz[n*n];
-        int j;
-        Heap *raiz;
-        raiz = NULL;
-        Pilha *topo;
+        double soma;
+        soma = 0;
+        int j, cont;
+        cont = 0;
+        // Heap *raiz;
+        // raiz = NULL;
+        // Pilha *topo;
         for(i = 0; i < n; i++){
             // vertice1 = MALLOC(Pessoas, 1);
             for(j = 0; j < n; j++){
                 // Pessoas *vertice2;
                 if(i < j){
-                    arestas[i][j] = MALLOC(Aresta, 1);
-                    arestas[i][j]->peso = distancia(vertice[i], vertice[j]);
+                    arestas[cont] = MALLOC(Aresta, 1);
+                    arestas[cont]->peso = distancia(vertice[i], vertice[j]);
                     // imprima1("peso: %lf", arestas[i][j]->peso);
 
-                    vertice[i]->numero = i;
-                    arestas[i][j]->vertice1 = vertice[i];
+                    arestas[cont]->vertice1 = vertice[i];
                     
                     // vertice2 = MALLOC(Pessoas, 1);
-                    vertice[j]->numero = j;
-                    arestas[i][j]->vertice2 = vertice[j];
+                    arestas[cont]->vertice2 = vertice[j];
 
                     // if(i == 0 && j == 1){
                     //     raiz = MALLOC(Heap, 1);
@@ -246,83 +273,126 @@ int main (){
                     //     topo->prox = NULL;
                     // }
                     // else{
-                        // Pilha *aux;
-                        // aux = MALLOC(Pilha, 1);
-                        // aux->no = insert(raiz, arestas[i][j]);
-                        // aux->prox = topo;
-                        // topo = aux;
-                        // if(raiz == NULL){
-                        //     raiz = topo->no;
-                        // }
+                    // Pilha *aux;
+                    // aux = MALLOC(Pilha, 1);
+                    // aux->no = insert(raiz, arestas[i][j]);
+                    // aux->prox = topo;
+                    // topo = aux;
+                    // if(raiz == NULL){
+                    //     raiz = topo->no;
+                    // }
                     // }
 
-                    arestas[i][j]->status = 0;
+                    // arestas[i][j]->status = 0;
 
-                    imprima1("%.2lf\t", arestas[i][j]->peso);
+                    // imprima1("%.2lf\t", arestas[i][j]->peso);
+                    cont++;
                 }
-                else{
-                    arestas[j][i] = arestas[i][j];
-                    if(i == j){
-                        arestas[i][j]->status = 1;
-                    }
-                    imprima("\t");
-                }
+                // else{
+                //     arestas[j][i] = arestas[i][j];
+                //     // if(i == j){
+                //     //     arestas[i][j]->status = 1;
+                //     // }
+                //     // imprima("\t");
+                // }
             }
-            imprima("\n");
+            // imprima("\n");
         }
-        
-        // while(topo != NULL){
-        //     // imprima1("%.2lf\t", topo->no->aresta->peso);
-        //     Pilha *aux;
+        // imprima("antes da ordenação: ");
+        // imprimirVetor(arestas, NArestas);
+        qsort(arestas, NArestas, sizeof(Aresta*), comparadorPeso);
+        // imprima("\ndepois da ordenação: ");
+        // imprimirVetor(arestas, NArestas);
+        // imprima("\n\n");
+
+        for(i = 0; i < NArestas; i++){
+            if(arestas[i]->vertice1->floresta != arestas[i]->vertice2->floresta){
+                Pessoas *vertice1, *vertice2;
+                int floresta;
+                vertice1 = arestas[i]->vertice1;
+                vertice2 = arestas[i]->vertice2;
+                floresta = vertice1->floresta;
+                for(j = 0; j < n; j++){
+                    if(vertice[j]->floresta == floresta){
+                        vertice[j]->floresta = vertice2->floresta;
+                    }
+                }
+                soma += arestas[i]->peso;
+            }
+        }
+        // imprima1("%.2lf\n", soma / 100);
+        // Pilha *aux;
+        // aux = MALLOC(Pilha, 1);
+        // aux->no = insert(raiz, arestas[0][1]);
+        // aux->prox = topo;
+        // topo = aux;
+        // if(raiz == NULL){
+        //     raiz = topo->no;
+        // }
+
+        // arestas[0][1]->status = -1;
+
+        // for(i = 0; i < n; i++){
+        //     for(j = 0; j < n; j++){
+        //         if(i < j){
+        //             if(arestas[i][j]->status == 0){
+        //                 aux = MALLOC(Pilha, 1);
+        //                 aux->no = insert(raiz, arestas[i][j]);
+        //                 aux->prox = topo;
+        //                 topo = aux;
+        //                 if(raiz == NULL){
+        //                     raiz = topo->no;
+        //                 }
+        //             }
+        //         }
+        //     }
         //     aux = topo;
         //     topo = aux->prox;
-        //     imprima1("Removendo: %.2lf\n", ARESTA->peso);
+        //     // imprima1("Removendo: %.2lf\n", ARESTA->peso);
         //     REMOVE(raiz, aux->no);
         //     free(aux);
         //     if(topo == NULL){
         //         raiz = NULL;
         //     }
-        //     imprima("\n");
-        //     imprima("\n");
-        //     imprimirArvore(raiz);
-        //     imprima("\n");
-        //     imprima("\n");
         // }
 
-        Pilha *aux;
-        aux = MALLOC(Pilha, 1);
-        aux->no = insert(raiz, arestas[0][1]);
-        aux->prox = topo;
-        topo = aux;
-        if(raiz == NULL){
-            raiz = topo->no;
-        }
+        // while(topo != NULL){
+        //     // imprima1("%.2lf\t", topo->no->aresta->peso);
+        //     if(ARESTA->vertice1->status == 0 || ARESTA->vertice2->status == 0 || ARESTA->vertice1->floresta != ARESTA->vertice2->floresta){
+        //         soma += raiz->PESO;
+        //         int florestaAtual;
+        //         florestaAtual = ARESTA->vertice1->floresta;
+        //         for(i = 0; i < n; i++){
+        //             if(vertice[i]->floresta == florestaAtual){
+        //                 vertice[i]->floresta = ARESTA->vertice2->floresta;
+        //             }
+        //         }
+        //         // imprima("vertice 1:\n");
+        //         // imprima2("numero: %d\tstatus: %d\n", ARESTA->vertice1->numero, ARESTA->vertice1->status);
+        //         // imprima("vertice 2:\n");
+        //         // imprima2("numero: %d\tstatus: %d\n", ARESTA->vertice2->numero, ARESTA->vertice2->status);
+        //         if(topo == NULL){
+        //             raiz = NULL;
+        //         }
+        //     }
+        //     ARESTA->vertice1->status = ARESTA->vertice2->status = 1;
+        //     aux = topo;
+        //     topo = aux->prox;
+        //     // imprima1("Removendo: %.2lf\n", ARESTA->peso);
+        //     REMOVE(raiz, aux->no);
+        //     if(topo == NULL){
+        //         raiz = NULL;
+        //     }
+        //     free(aux);
+        //     // imprima("\n");
+        //     // imprima("\n");
+        //     // imprimirArvore(raiz);
+        //     // imprima("\n");
+        // }
 
-        arestas[0][1]->status = -1;
+        // imprima1("%.3lf\n", soma / 100);
 
-        for(i = 0; i < n; i++){
-            for(j = 0; j < n; j++){
-                if(i < j){
-                    if(arestas[i][j]->status == 0){
-                        aux = MALLOC(Pilha, 1);
-                        aux->no = insert(raiz, arestas[i][j]);
-                        aux->prox = topo;
-                        topo = aux;
-                        if(raiz == NULL){
-                            raiz = topo->no;
-                        }
-                    }
-                }
-            }
-            aux = topo;
-            topo = aux->prox;
-            // imprima1("Removendo: %.2lf\n", ARESTA->peso);
-            REMOVE(raiz, aux->no);
-            free(aux);
-            if(topo == NULL){
-                raiz = NULL;
-            }
-        }
+        printf("%.2lf\n", soma / 100);
 
         // if(c == 2){
         //     imprima1("teste de casting: %lf\n\n", sqrt(5));
@@ -370,6 +440,6 @@ int main (){
         c--;
     }
 
-    fclose(resultado);
+    // fclose(resultado);
     return 0;
 }
