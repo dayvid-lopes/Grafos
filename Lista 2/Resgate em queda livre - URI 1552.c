@@ -7,18 +7,16 @@
 //     double y;
 // }Ponto;
 
-typedef struct typevertices
-{
-    int status;
-    int numero;
-    int floresta;
+typedef struct typevertices Pessoas;
+
+struct typevertices{
     double x;
     double y;
-}Pessoas;
+    Pessoas *origem;
+};
 
 typedef struct typearesta{
     double peso;
-    int status;
     Pessoas *vertice1;
     Pessoas *vertice2;
 }Aresta;
@@ -51,12 +49,13 @@ typedef struct typearesta{
 #define imprima(texto) fprintf(resultado, texto)
 #define imprima1(texto, valor1) fprintf(resultado, texto, valor1)
 #define imprima2(texto, valor1, valor2) fprintf(resultado, texto, valor1, valor2)
+#define imprima3(texto, valor1, valor2, valor3) fprintf(resultado, texto, valor1, valor2, valor3)
 #define filhoCompleto(valor) log2(1 - (valor / 2.0) * (1 - 2)) == (int)log2(1 - (valor / 2.0) * (1 - 2))? 1 : 0
 #define ARESTAS(i, j) arestas[n * i + j]
 #define REMOVE(raiz, aresta) raiz = removerRaiz(raiz, aresta)
 #define distancia(ponto1, ponto2) sqrt(pow(ponto1->x - ponto2->x, 2) + pow(ponto1->y - ponto2->y, 2))
 
-// FILE *resultado;
+FILE *resultado;
 
 // double distancia(Pessoas *ponto1, Pessoas *ponto2){
 //     return sqrt(pow(ponto1->x - ponto2->x, 2) + pow(ponto1->y - ponto2->y, 2));
@@ -211,10 +210,10 @@ int comparadorPeso(const void ** a, const void ** b) {
 // }
 
 int main(){
-    // resultado = fopen("Lista 2/resultados/resultado 1552", "w");
-    // if(resultado == NULL){
-    //     return 1;
-    // }
+    resultado = fopen("Lista 2/resultados/resultado 1552", "w");
+    if(resultado == NULL){
+        return 1;
+    }
     int c;
 
     scanf("%d", &c);
@@ -237,8 +236,7 @@ int main(){
 
         for(i = 0; i < n; i++){
             vertice[i] = MALLOC(Pessoas, 1);
-            vertice[i]->status = 0;
-            vertice[i]->numero = vertice[i]->floresta = i;
+            vertice[i]->origem = vertice[i];
             scanf("%lf %lf", &vertice[i]->x, &vertice[i]->y);
         }
         
@@ -305,27 +303,54 @@ int main(){
         // imprimirVetor(arestas, NArestas);
         // imprima("\n\n");
         i = 0;
-        while(i < NArestas && cont != NArestas){
-            if(arestas[i]->vertice1->floresta != arestas[i]->vertice2->floresta){
-                Pessoas *vertice1, *vertice2;
-                int floresta;
-                vertice1 = arestas[i]->vertice1;
-                vertice2 = arestas[i]->vertice2;
-                floresta = vertice1->floresta;
-                cont = 0;
-                for(j = 0; j < n; j++){
-                    if(vertice[j]->floresta == floresta){
-                        vertice[j]->floresta = vertice2->floresta;
-                    }
-                    if(vertice[j]->floresta == 0){
-                        cont++;
-                    }
+        
+        int cont1, cont2;
+
+        while(i < NArestas){
+            
+            Pessoas *vertice1, *vertice2;
+
+            vertice1 = arestas[i]->vertice1;
+            vertice2 = arestas[i]->vertice2;
+
+            cont1 = cont2 = 0;
+
+            // raiz1 = vertice1;
+
+            while(vertice1 != vertice1->origem){
+                // vertice1->origem = raiz1;
+                vertice1 = vertice1->origem;
+                cont1++;
+                // contV1++;
+                // imprima1("raiz1 em i = %d\n", i);
+            }
+
+            // raiz2 = vertice2;
+            while(vertice2 != vertice2->origem){
+                // vertice2->origem = raiz2;
+                cont2++;
+                // contV2++;
+                vertice2 = vertice2->origem;
+            }
+
+            if(vertice1 != vertice2){
+                if(cont1 < cont2){
+                    vertice1->origem = vertice2;
                 }
+                else{
+                    vertice2->origem = vertice1;
+                }
+                // for(j = 0; j < n; j++){
+                //     if(vertice[j]->floresta == floresta){
+                //         vertice[j]->floresta = vertice2->floresta;
+                //     }
+                // }
+                // imprima1("i = %d\n", i);
                 soma += arestas[i]->peso;
             }
             i++;
         }
-        // imprima1("%.2lf\n", soma / 100);
+        // imprima3("cont total = %5d | cont1 = %5d | cont2 = %5d\n", cont1 + cont2, cont1, cont2);
         // Pilha *aux;
         // aux = MALLOC(Pilha, 1);
         // aux->no = insert(raiz, arestas[0][1]);
@@ -445,6 +470,6 @@ int main(){
         c--;
     }
 
-    // fclose(resultado);
+    fclose(resultado);
     return 0;
 }
