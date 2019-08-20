@@ -304,21 +304,26 @@ int main(){
         // imprima("\ndepois da ordenação: ");
         // imprimirVetor(arestas, NArestas);
         // imprima("\n\n");
-
-        for(i = 0; i < NArestas; i++){
+        i = 0;
+        while(i < NArestas && cont != NArestas){
             if(arestas[i]->vertice1->floresta != arestas[i]->vertice2->floresta){
                 Pessoas *vertice1, *vertice2;
                 int floresta;
                 vertice1 = arestas[i]->vertice1;
                 vertice2 = arestas[i]->vertice2;
                 floresta = vertice1->floresta;
+                cont = 0;
                 for(j = 0; j < n; j++){
                     if(vertice[j]->floresta == floresta){
                         vertice[j]->floresta = vertice2->floresta;
                     }
+                    if(vertice[j]->floresta == 0){
+                        cont++;
+                    }
                 }
                 soma += arestas[i]->peso;
             }
+            i++;
         }
         // imprima1("%.2lf\n", soma / 100);
         // Pilha *aux;
