@@ -5,6 +5,8 @@
 
 1552: compilar_1552 run_1552
 
+2885: compilar_2885 run_2885
+
 2: main clean run2
 
 3: main clean run3
@@ -23,6 +25,9 @@ compilar_1550:
 compilar_1552: 
 			gcc -o executavel Lista\ 2/Resgate\ em\ queda\ livre\ -\ URI\ 1552.c -lm
 
+compilar_2885: 
+			gcc -o executavel Lista\ 2/Juntando\ capitais\ -\ URI\ 2885.c -lm
+
 #Regras de execução
 
 run_1550: 
@@ -30,9 +35,10 @@ run_1550:
 			clear && cat Lista\ 1/resultados/resultado\1550
 
 run_1552: 
-			cat Lista\ 2/entradas/entrada\ 1552 | ./executavel
-			rm executavel
-			clear && cat Lista\ 2/resultados/resultado\ 1552
+			clear && cat Lista\ 2/entradas/entrada\ 1552 | ./executavel && rm executavel
+
+run_2885: 
+			clear && cat Lista\ 2/entradas/entrada\ 2885 | ./executavel && rm executavel
 
 # main: main.o Controle.o Data.o Filas.o HRRN.o Loterry.o 1-Loterry.o Multilevel_Feedback.o Processos.o Round-robins.o
 # 			gcc -o main main.o Controle.o Data.o Filas.o HRRN.o Loterry.o 1-Loterry.o Multilevel_Feedback.o Processos.o Round-robins.o
