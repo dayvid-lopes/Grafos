@@ -5,40 +5,38 @@
 
 1552: compilar_1552 run_1552
 
+1621: compilar_1621 run_1621
+
 2885: compilar_2885 run_2885
-
-2: main clean run2
-
-3: main clean run3
-
-4: main clean run4
-
-5: main clean run5
-
-all: main clean run1 run2 run3 run4 run5
 
 #Regras de compilação
 
 compilar_1550: 
-			gcc -o executavel Lista1/Resgate\ em\ queda\ livre\ -\ URI\ 1552.c
+	gcc -o executavel Lista\ 1/Inversão\ -\ URI\ 1550.c
 
 compilar_1552: 
-			gcc -o executavel Lista\ 2/Resgate\ em\ queda\ livre\ -\ URI\ 1552.c -lm
+	gcc -o executavel Lista\ 2/Resgate\ em\ queda\ livre\ -\ URI\ 1552.c -lm
+
+compilar_1621: 
+	gcc -o executavel Lista\ 2/Labirinto\ -\ URI\ 1621.c -lm
 
 compilar_2885: 
-			gcc -o executavel Lista\ 2/Juntando\ capitais\ -\ URI\ 2885.c -lm
+	gcc -o executavel Lista\ 2/Juntando\ capitais\ -\ URI\ 2885.c -lm
 
 #Regras de execução
 
 run_1550: 
-			cat Lista\ 1/entradas/entrada\ 1550 | ./executavel
-			clear && cat Lista\ 1/resultados/resultado\1550
+	cat Lista\ 1/entradas/entrada\ 1550 | ./executavel
+	clear && cat Lista\ 1/resultados/resultado\1550
 
 run_1552: 
-			clear && cat Lista\ 2/entradas/entrada\ 1552 | ./executavel && rm executavel
+	clear && cat Lista\ 2/entradas/entrada\ 1552 | ./executavel && rm executavel
+
+run_1621:
+	clear && cat Lista\ 2/entradas/entrada\ 1621 | ./executavel && rm executavel
 
 run_2885: 
-			clear && cat Lista\ 2/entradas/entrada\ 2885 | ./executavel && rm executavel
+	clear && cat Lista\ 2/entradas/entrada\ 2885 | ./executavel && rm executavel
 
 # main: main.o Controle.o Data.o Filas.o HRRN.o Loterry.o 1-Loterry.o Multilevel_Feedback.o Processos.o Round-robins.o
 # 			gcc -o main main.o Controle.o Data.o Filas.o HRRN.o Loterry.o 1-Loterry.o Multilevel_Feedback.o Processos.o Round-robins.o
