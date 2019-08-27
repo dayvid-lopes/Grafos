@@ -1,78 +1,105 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <math.h>
-
-typedef struct typevertices Vertice;
-
-struct typevertices{
-    double x;
-    double y;
-    Vertice *origem;
-};
-
-typedef struct typearesta{
-    double peso;
-    Vertice *vertice1;
-    Vertice *vertice2;
-}Aresta;
-
-#define MALLOC(t,n) (t*) malloc(sizeof(t)*n)
-#define distancia(ponto1, ponto2) sqrt(pow(ponto1->x - ponto2->x, 2) + pow(ponto1->y - ponto2->y, 2))
-#define imprima(texto) fprintf(resultado, texto)
-#define imprima1(texto, valor1) fprintf(resultado, texto, valor1)
-#define imprima2(texto, valor1, valor2) fprintf(resultado, texto, valor1, valor2)
-#define imprima3(texto, valor1, valor2, valor3) fprintf(resultado, texto, valor1, valor2, valor3)
+#include "cabeçalhos.h"
 
 FILE *resultado;
-int ultimo_vertice, vertice_ant;
 
-void adicionarAresta(int n, int v, int w, int *matriz, int indice){
-    if(matriz[n * v + indice] == -1){
-        matriz[n * v + indice] = w;
-        matriz[n * v + indice + 1] = -1;
+typedef struct typeretorno{
+    int ultimo_vertice;
+    int maior_distancia;
+}Retorno;
+
+int n;
+int adicionarAresta(int v, int w, int matriz[n][4], int indice){
+    // if(matriz[v][indice] == -1){
+    matriz[v][indice] = w;
+    if(indice < 4){
+        matriz[v][++indice] = -1;
     }
-    else{
-        adicionarAresta(n, v, w, matriz, indice + 1);
-    }
+    return indice;
+    // printf("adicionando aresta: (%d, %d)\n", v, w, matriz[v][]);
+    // }
 }
 
-int comparadorPeso(const void ** a, const void ** b) {
-    double peso_a, peso_b;
-    peso_a = ((Aresta*)*a)->peso;
-    peso_b = ((Aresta*)*b)->peso;
+Retorno * calcularMaiorCaminho(int arestas[n][4], int marcacoes[], int atual){
+    marcacoes[atual] = 1;
+    // if(anterior == -1){
+    //     marcacoes[0] = 1;
+    // }
+    // else{
+    //     marcacoes[atual] = marcacoes[anterior] * (-1);
+    // }
 
-    if (peso_a == peso_b)
-        return 0;
-
-    if (peso_a < peso_b)
-        return -1;
-
-    return 1;
-}
-
-int analisaRamos(int n, int *matriz, int *vertices, int vertice_atual){
-    int i = 0, cont_ant = 0, cont = 0;
-    printf("vertice atual: %d\n", vertice_atual);
-    vertices[vertice_atual] = 1;
-    while(matriz[n * vertice_atual + i] != -1){
-        int w;
-        w = matriz[n * vertice_atual + i];
-        printf("proximo vertice: %d\t i: %d\tn * vertice_atual + i: %d\n", w, i, n * vertice_atual + i);
-        if(vertices[w] == 0){
-            cont = analisaRamos(n, matriz, vertices, w);
-        }
-        if(cont > cont_ant){
-            vertice_ant = ultimo_vertice;
-            // printf("vertice_ant: %d\t", vertice_ant);
-            cont_ant = cont;
-            // printf("cont_ant: %d\n", cont_ant);
+    int i, proximo, verificador;
+    Retorno *recebido, *enviado;
+    // int ultimo_vertice, vertice_maior_caminho;
+    // vertice_maior_caminho = atual;
+    verificador = 0;
+    i = 0;
+    enviado = MALLOC(Retorno, 1);
+    enviado->maior_distancia = 0;
+    enviado->ultimo_vertice = atual;
+    
+    while(i < 4 && arestas[atual][i] != -1){
+        proximo = arestas[atual][i];
+        if(marcacoes[proximo] == 0){
+            recebido = calcularMaiorCaminho(arestas, marcacoes, proximo);
+            recebido->maior_distancia++;
+            if(enviado->maior_distancia < recebido->maior_distancia){
+                enviado->maior_distancia = recebido->maior_distancia;
+                enviado->ultimo_vertice = recebido->ultimo_vertice;
+            }
+            free(recebido);
         }
         i++;
     }
-    if(cont_ant == 0){
-        ultimo_vertice = vertice_atual;
+    return enviado;
+
+    // else{
+    //     if(marcacoes[anterior] == marcacoes[atual]){
+    //         return 1;
+    //     }
+    //     else {
+    //         return 0;
+    //     }
+    // }
+}
+
+int percorrerMaiorCaminho(int arestas[n][4], int marcacoes[], int atual){
+    marcacoes[atual] = 1;
+    // if(anterior == -1){
+    //     marcacoes[0] = 1;
+    // }
+    // else{
+    //     marcacoes[atual] = marcacoes[anterior] * (-1);
+    // }
+
+    int i, distancia, proximo, maior_distancia, verificador;
+    int ultimo_vertice, vertice_maior_caminho;
+    verificador = 0;
+    i = 0;
+    maior_distancia = 0;
+    
+    while(arestas[atual][i] != -1){
+        proximo = arestas[atual][i];
+        if(i < 4 && marcacoes[proximo] != -1){
+            distancia = 1;
+            distancia += percorrerMaiorCaminho(arestas, marcacoes, proximo);
+            if(maior_distancia < distancia){
+                maior_distancia = distancia;
+            }
+            verificador = 1;
+        }
+        i++;
     }
-    return cont_ant + 1;
+    return maior_distancia;
+
+    // else{
+    //     if(marcacoes[anterior] == marcacoes[atual]){
+    //         return 1;
+    //     }
+    //     else {
+    //         return 0;
+    //     }
+    // }
 }
 
 int main(){
@@ -82,7 +109,7 @@ int main(){
         return 1;
     }
 
-    int n, m, i, j;
+    int m, i, j;
 
     scanf("%d %d", &n, &m);
 
@@ -102,95 +129,113 @@ int main(){
                 if(caracter == '.'){
                     vertice[i][j] = NVertices;
                     NVertices++;
-                    imprima(".");
+                    // imprima(".");
                 }
                 if(caracter == '#'){
                     vertice[i][j] = - 1;
-                    imprima("#");
+                    // imprima("#");
                 }
                 if(caracter == '\n'){
-                    imprima("\n");
+                    // imprima("\n");
                 }
                 else{
-                    imprima1("%d\t", vertice[i][j]);
+                    // imprima1("%d\t", vertice[i][j]);
                 }
             }
-            imprima("\n");
+            // imprima("\n");
         }
 
-        int matriz[NVertices * (NVertices * (NVertices - 1) / 2)], vertices[NVertices];
+        int matriz[NVertices][4], vertices[NVertices];
 
-        for(i = 0; i < NVertices; i++){
-            matriz[i * NVertices] = -1;
-        }
+        // for(i = 0; i < NVertices; i++){
+        //     matriz[i][0] = -1;
+        // }
 
         // for(i = 0; i < NVertices; i++){
         //     // vertices[i] = 0;
         //     j = 0;
-        //     imprima1("%d\t|.\t", i);
+            // imprima1("%d\t|.\t", i);
         //     while(j < NVertices * (NVertices - 1) / 2 && matriz[NVertices * i + j] != -1){
-        //         imprima1("%d\t", matriz[NVertices * i + j]);
+                // imprima1("%d\t", matriz[NVertices * i + j]);
         //         j++;
         //     }
-        //     imprima("\n");
+            // imprima("\n");
         // }
 
         for(i = 0; i < n; i++){
             for(j = 0; j < m; j++){
                 if(vertice[i][j] > -1){
+                    int indice = 0;
                     if(i > 0 && vertice[i - 1][j] > -1){
-                        adicionarAresta(NVertices, vertice[i][j], vertice[i - 1][j], matriz, 0);
+                        matriz[vertice[i][j]][indice] = vertice[i - 1][j];
+                        matriz[vertice[i][j]][++indice] = -1;
                     }
                     if(j > 0 && vertice[i][j - 1] > -1){
-                        adicionarAresta(NVertices, vertice[i][j], vertice[i][j - 1], matriz, 0);
+                        matriz[vertice[i][j]][indice] = vertice[i][j - 1];
+                        matriz[vertice[i][j]][++indice] = -1;
                     }
                     if((i < n - 1) && vertice[i + 1][j] > -1){
-                        adicionarAresta(NVertices, vertice[i][j], vertice[i + 1][j], matriz, 0);
+                        matriz[vertice[i][j]][indice] = vertice[i + 1][j];
+                        matriz[vertice[i][j]][++indice] = -1;
                     }
                     if((j < m - 1) && vertice[i][j + 1] > -1){
-                        adicionarAresta(NVertices, vertice[i][j], vertice[i][j + 1], matriz, 0);
+                        matriz[vertice[i][j]][indice] = vertice[i][j + 1];
+                        if(indice < 4){
+                            matriz[vertice[i][j]][++indice] = -1;
+                        }
                     }
                 }
             }
         }
-        imprima("\n");
+
+        // imprima("\n");
         // n = NVertices;
         for(i = 0; i < NVertices; i++){
             vertices[i] = 0;
             j = 0;
-            imprima1("%d\t|\t", i);
-            while(j < NVertices * (NVertices - 1) / 2 && matriz[NVertices * i + j] != -1){
-                imprima1("%d\t", matriz[NVertices * i + j]);
+            // imprima1("%d\t|\t", i);
+            while(j < 4 && matriz[i][j] != -1){
+                // imprima1("%d\t", matriz[i][j]);
+                if(j > 0){
+                    // printf("j = %d\n", j);
+                }
                 j++;
             }
-            imprima("\n");
+            // imprima("\n");
         }
         
         // printf("\n");
         // imprima("\n");
         // printf("primeira iteração %m\n");
         // imprima1("resultado inicial: %d\n", 
-        analisaRamos(NVertices, matriz, vertices, 0);
+        Retorno *retorno;
+        
+        retorno = calcularMaiorCaminho(matriz, vertices, 0);
 
         for(i = 0; i < NVertices; i++){
             vertices[i] = 0;
             // j = 0;
             // imprima1("%d\t|\t", i);
             // while(j < NVertices * (NVertices - 1) / 2 && matriz[NVertices * i + j] != -1){
-            //     imprima1("%d\t", matriz[NVertices * i + j]);
+                // imprima1("%d\t", matriz[NVertices * i + j]);
             //     j++;
             // }
             // imprima("\n");
         }
-
+        // imprima1("primeiro resultado: %d\n", retorno->maior_distancia);
         int res;
-        printf("\nsegunda iteração %m\n");
+        res = retorno->maior_distancia;
+        retorno = calcularMaiorCaminho(matriz, vertices, retorno->ultimo_vertice);
+        // if(res > retorno->maior_distancia){
+        //     imprima("Warning!!!");
+        // }
+        // printf("\nsegunda iteração %m\n");
 
-        res = analisaRamos(NVertices, matriz, vertices, vertice_ant);
-        printf("terceira iteração %m\n");
+        // res = analisaRamos(NVertices, matriz, vertices, vertice_ant);
+        // printf("terceira iteração %m\n");
 
-        imprima1("resultado: %d\n", res);
-        printf("final %m\n\n");
+        imprima1("%d\n", retorno->maior_distancia);
+        // printf("final %m\n\n");
 
         // scanf("%d", &n);
 
@@ -269,3 +314,77 @@ int main(){
     fclose(resultado);
     return 0;
 }
+
+// #include <stdio.h>
+
+// int percorrerVertices(int *arestas, int marcacoes[], int n, int atual, int anterior);
+
+// int main() {
+//     int n;
+    
+//     scanf("%d", &n);
+
+//     while(n != 0){
+
+//         int i, j, arestas[n][n], id, marcacoes[n];
+        
+//         char enter;
+
+//         for(i = 0; i < n; i++){
+//             scanf("%d", &id);
+//             j = 0;
+//             do{
+//                 scanf("%d%c", &arestas[i][j], &enter);
+//                 arestas[i][j]--;
+//                 j++;
+//             }while(enter != '\n');
+
+//             arestas[i][j] = -1;
+
+//             marcacoes[i] = 0;
+//         }
+
+//         if(percorrerVertices(arestas, marcacoes, n, 0, -1) > 0){
+//             printf("NAO\n");
+//         }
+//         else{
+//             printf("SIM\n");
+//         }
+
+//         scanf("%d", &n);
+//     }
+//     return 0;
+// }
+
+// int percorrerVertices(int *arestas, int marcacoes[], int n, int atual, int anterior){
+//     if(marcacoes[atual] == 0){
+//         if(anterior == -1){
+//             marcacoes[0] = 1;
+//         }
+//         else{
+//             marcacoes[atual] = marcacoes[anterior] * (-1);
+//         }
+
+//         int i, verificador;
+//         i = 0;
+//         verificador = 0;
+        
+//         while(arestas[n * atual + i] != -1){
+//             verificador += percorrerVertices(arestas, marcacoes, n, arestas[n * atual + i], atual);
+//             i++;
+//             if(verificador > 0){
+//                 return verificador;
+//             }
+//         }
+//         return verificador;
+//     }
+
+//     else{
+//         if(marcacoes[anterior] == marcacoes[atual]){
+//             return 1;
+//         }
+//         else {
+//             return 0;
+//         }
+//     }
+// }
