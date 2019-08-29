@@ -1,6 +1,8 @@
 #Para escrever comentários ##
 ############################# Makefile ##########################
 
+1391: compilar_1391 run_1391
+
 1550: compilar_1550 run_1550
 
 1552: compilar_1552 run_1552
@@ -10,6 +12,9 @@
 2885: compilar_2885 run_2885
 
 #Regras de compilação
+
+compilar_1391:
+	gcc -o executavel Lista\ 2/Quase\ menor\ caminho\ -\ URI\ 1391.c
 
 compilar_1550: 
 	gcc -o executavel Lista\ 1/Inversão\ -\ URI\ 1550.c
@@ -25,6 +30,9 @@ compilar_2885:
 
 #Regras de execução
 
+run_1391:
+	cat Lista\ 2/entradas/entrada\ 1391 | ./executavel && rm executavel
+
 run_1550: 
 	cat Lista\ 1/entradas/entrada\ 1550 | ./executavel
 	clear && cat Lista\ 1/resultados/resultado\1550
@@ -33,7 +41,7 @@ run_1552:
 	clear && cat Lista\ 2/entradas/entrada\ 1552 | ./executavel && rm executavel
 
 run_1621:
-	clear && cat Lista\ 2/entradas/entrada\ 1621 | ./executavel && rm executavel
+	cat Lista\ 2/entradas/entrada\ 1621 | ./executavel
 
 run_2885: 
 	clear && cat Lista\ 2/entradas/entrada\ 2885 | ./executavel && rm executavel
