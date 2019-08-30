@@ -44,38 +44,57 @@ int main(){
                 matriz[i][j] = 0;
             }
         }
+
         for(i = 0; i < m; i++){
             scanf("%d %d %d", &u, &v, &p);
             matriz[u][v] = p;
             distancias[i] = -1;
             q[i] = 0;
         }
+
         distancias[s] = 0;
         int prox, menor_caminho[n], indice;
         indice = 0;
+        i = 0;
         prox = s;
-        for(i = 0; i < n; i++){
+        while(i < n && q[prox] == 0){
+            menor_caminho[indice++] = prox;
             q[prox] = 1;
-            if(prox != d){
-                menor_caminho[indice++] = prox;
-                prox = Dijkstra(matriz, distancias, q, d, prox);
-            }
+            prox = Dijkstra(matriz, distancias, q, d, prox);
+            i++;
         }
+
+
         for(i = 1; i < indice; i++){
             matriz[i - 1][i] = 0;
         }
 
-        for(i = 0; i < n; i++){
-            imprima2("i: %d\tdistancia: %d\n", i, distancias[i]);
+        for(i = 0; i < m; i++){
+            distancias[i] = -1;
+            q[i] = 0;
         }
-        imprima("\n");
 
-        qsort(distancias, n, sizeof(int), comparadorPeso);
-        
-        for(i = 0; i < n; i++){
-            imprima2("i: %d\tdistancia: %d\n", i, distancias[i]);
+        distancias[s] = 0;
+        indice = 0;
+        i = 0;
+        prox = s;
+        while(i < n){
+            q[prox] = 1;
+            prox = Dijkstra(matriz, distancias, q, d, prox);
+            i++;
         }
-        imprima("\n");
+
+        // for(i = 0; i < n; i++){
+        //     imprima2("i: %d\tdistancia: %d\n", i, distancias[i]);
+        // }
+        imprima1("%d\n", distancias[d]);
+
+        // qsort(distancias, n, sizeof(int), comparadorPeso);
+        
+        // for(i = 0; i < n; i++){
+        //     imprima2("i: %d\tdistancia: %d\n", i, distancias[i]);
+        // }
+        // imprima("\n");
 
         scanf("%d %d", &n, &m);
     }
