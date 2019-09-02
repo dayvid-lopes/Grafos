@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
+#include <string.h>
 #define MALLOC(t,n) (t*) malloc(sizeof(t)*n)
 // #define distancia(ponto1, ponto2) sqrt(pow(ponto1->x - ponto2->x, 2) + pow(ponto1->y - ponto2->y, 2))
 #define imprima(texto) fprintf(saida, texto)
