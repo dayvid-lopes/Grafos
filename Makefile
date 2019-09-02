@@ -1,6 +1,8 @@
 #Para escrever comentários ##
 ############################# Makefile ##########################
 
+1362: compilar_1362 run_1362
+
 1391: compilar_1391 run_1391
 
 1550: compilar_1550 run_1550
@@ -12,6 +14,9 @@
 2885: compilar_2885 run_2885
 
 #Regras de compilação
+
+compilar_1362:
+	gcc -o executavel Lista\ 2/Minha\ camiseta\ me\ serve\ -\ URI\ 1362.c
 
 compilar_1391:
 	gcc -o executavel Lista\ 2/Quase\ menor\ caminho\ -\ URI\ 1391.c
@@ -29,6 +34,9 @@ compilar_2885:
 	gcc -o executavel Lista\ 2/Juntando\ capitais\ -\ URI\ 2885.c -lm
 
 #Regras de execução
+
+run_1362:
+	cat Lista\ 2/entradas/entrada\ 1362 | ./executavel && rm executavel
 
 run_1391:
 	cat Lista\ 2/entradas/entrada\ 1391 | ./executavel && rm executavel
